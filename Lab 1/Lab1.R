@@ -137,6 +137,8 @@ barplot(throw15)
 xpois <- rpois(10000,4)
 tabpois <- table(xpois)
 tabpoisp <- tabpois/10000
+barplot(tabpois)
+barplot(tabpoisp)
 
 # barplot(tabpois) from the command line to draw this
 # barplot(tabpoisp) for the probability distribution
@@ -152,6 +154,8 @@ tabpoisp <- tabpois/10000
 xunif <- ceiling(runif(10000,0,6))
 tabunif <- table(xunif)
 tabunifp <- tabunif/10000
+barplot(tabunif)
+barplot(tabunifp)
 
 # barplot(tabunif) from the command line to draw this
 # barplot(tabunifp) for the probability distribution
@@ -168,6 +172,8 @@ tabunifp <- tabunif/10000
 xmiss <- c(rep(1,1000),rep(2,1),rep(3,1000),rep(4,1000),rep(5,1000),rep(6,1000))
 tabxmiss <- table(xmiss)
 tabxmissp <- tabxmiss/5001
+barplot(tabxmiss)
+barplot(tabxmissp)
 
 # barplot(tabxmiss) from the command line to draw this
 # barplot(tabxmissp) for the probability distribution
@@ -178,6 +184,7 @@ tabxmissp <- tabxmiss/5001
 
 tabpois2 <- tabpois # make a copy
 tabpois2[11] <- 2000 # replace the 11th element of the table (i.e. X=10) with 2000
+barplot(tabpois2)
 
 # barplot(tabpois2) from the command line to draw this
 
@@ -188,6 +195,8 @@ tabpois2[11] <- 2000 # replace the 11th element of the table (i.e. X=10) with 20
 
 # rnorm(t,mu,sd) creates t normal random variables, each with mean mu and standard deviation sd.
 xnorm <- rnorm(10000,150,25) # mean 150, sd 25
+hist(xnorm)
+hist(xnorm,breaks=100)
 
 # hist(xnorm) will draw the histogram
 # hist(xnorm,breaks=100) will draw the histogram with 100 bins
@@ -196,7 +205,9 @@ xnorm <- rnorm(10000,150,25) # mean 150, sd 25
 ######### QUESTION 4 ###############
 # Create your own sample of 5000 normal variables, representing whatever population you wish. The values must
 # be continuous. Draw a histogram of your sample, and then again forcing R to use 50 bins.
-
+normSample <- rnorm(5000,150,50)
+hist(normSample)
+hist(normSample,breaks=50)
 
 # Since we are using continuous data, we should really use probability distributions, rather than histograms.
 # The following commands can be used to draw these normal distributions. dnorm is the distribution for the normal, 
@@ -204,8 +215,10 @@ xnorm <- rnorm(10000,150,25) # mean 150, sd 25
 
 height <- seq(50,250,length=200)
 probden <- dnorm(height,150,25)
-# plot(height,probden,type="l") will draw the line version between 0 and 300
+plot(height,probden,type="l")
+boxplot(xnorm)
 
+# plot(height,probden,type="l") will draw the line version between 0 and 300
 # boxplot(xnorm) will draw the box and whisker plot
 
 
@@ -214,12 +227,12 @@ probden <- dnorm(height,150,25)
 # You don't really need to worry about the F-distribution, it is just to show a skewed distribution.
 xf1 <- rf(10000,5,2) # too many repeats just gives large values
 xf2 <- rf(10,5,2)
-# hist(xf1,xlim=c(0,7),breaks=30000)
-# boxplot(xf2)
+hist(xf1,xlim=c(0,7),breaks=30000)
+boxplot(xf2)
 
 len <- seq(0,5,length=100)
 probdenf <- df(len,5,2)
-# plot(len,probdenf,type="l")
+plot(len,probdenf,type="l")
 
 
 
@@ -243,11 +256,15 @@ rownames(contable) <- c("Apples","Pears","Carrots")
 
 # this line is needed since the barplot function expects a table, not a matrix.
 contable <- as.table(contable)
+barplot(contable,legend.text=TRUE)
+barplot(contable,beside=TRUE,legend.text=TRUE)
 
 # barplot(contable,legend.text=TRUE) produces a stacked bar chart, with columns along the bottom
 # barplot(contable,beside=TRUE,legend.text=TRUE) produces a grouped bar chart
 
 contablet <- t(contable) # transpose it
+barplot(contablet,legend.text=TRUE)
+barplot(contablet,beside=TRUE,legend.text=TRUE)
 
 # barplot(contablet,legend.text=TRUE) produces a stacked bar chart, with rows along the bottom
 # barplot(contablet,beside=TRUE,legend.text=TRUE) produces a grouped bar chart
@@ -256,8 +273,12 @@ contablet <- t(contable) # transpose it
 ########  QUESTION 5 ##############
 # Create your own two-way table, with categorical variables in each dimension, and draw it in 
 # the two ways given above.
-
-
+twoTable <- matrix(c(3,5,16,8,6,18,9,8,13),ncol=3,byrow=TRUE)
+colnames(twoTable) <- c("Tea","Coffee", "Other")
+rownames(twoTable) <- c("Costa","Starbucks","Pret")
+twoTable <- as.table(twoTable)
+barplot(twoTable,legend.text=TRUE)
+barplot(twoTable,beside=TRUE,legend.text=TRUE)
 
 
 
@@ -266,6 +287,7 @@ contablet <- t(contable) # transpose it
 # We all know East Lothian is the best of the Lothians, and here is a demonstration of that fact.
 
 lothians <- data.frame(East=rnorm(1000,185,12),Mid=rnorm(1000,160,13),West=rnorm(1000,140,10))
+boxplot(lothians,ylab="Height (cm)")
 # boxplot(lothians,ylab="Height (cm)") to draw
 
 
@@ -279,6 +301,9 @@ probdenW <- dnorm(heightE,140,10)
 
 # draw the one with lowest sd first
 # Put each of the following commands in separately.
+plot(heightE,probdenW,type="l",col="blue",xlab="Height",ylab="Density")
+lines(heightE,probdenM,col="red")
+lines(heightE,probdenE,col="green")
 
 # plot(heightE,probdenW,type="l",col="blue",xlab="Height",ylab="Density")
 # lines(heightE,probdenM,col="red")
@@ -298,12 +323,17 @@ jitter2 <- rnorm(200,0,0.25) # smaller jitter
 
 # The right-hand side of each of the following shows what kind of curve we will expect. Here, it is linear.
 ys1 <- xs + jitter1 # create the y-values 
+plot(xs,ys1)
+abline(lm(ys1~xs),col="red") 
 
 # plot(xs,ys1)
 # abline(lm(ys1~xs),col="red") 
 
 # Here it is a squared curve. Lowess is more appropriate for curves than straight lines.
 ys2 <- xs^2/2 + jitter1
+plot(xs,ys2)
+abline(lm(ys2~xs),col="red")
+lines(lowess(xs,ys2),col="blue")
 
 # plot(xs,ys2)
 # abline(lm(ys2~xs),col="red")
@@ -311,12 +341,16 @@ ys2 <- xs^2/2 + jitter1
 
 # Negative linear
 ys3 <- jitter1 - xs
-
+plot(xs,ys3)
+abline(lm(ys3~xs), col="red")
 # plot(xs,ys3)
 # abline(lm(ys3~xs), col="red")
 
 # A sine curve
 ys4 <- sin(xs) + jitter2
+plot(xs,ys4)
+abline(lm(ys4~xs), col="red")
+lines(lowess(xs,ys4),col="blue")
 
 # plot(xs,ys4)
 # abline(lm(ys4~xs), col="red")
@@ -328,6 +362,8 @@ ys4 <- sin(xs) + jitter2
 jitter3 <- c(rnorm(20,0,0.5),6,rnorm(179,0,0.5))
 
 ys5 <- xs + jitter3
+plot(xs,ys5)
+abline(lm(ys5~xs),col = "red")
 
 # plot(xs,ys5)
 # abline(lm(ys5~xs),col = "red")
@@ -364,6 +400,9 @@ oysters <- rbind(aam,apm,bam,bpm,cam,cpm)
 
 
 # We will investigate how to use ggplot, and what all this means, later in the semester
+ggplot(data=oysters,aes(y=Weight,x=Location,fill=Time)) + geom_boxplot()
+ggplot(data=oysters,aes(y=Weight,x=Time,fill=Location)) + geom_boxplot()
+ggplot(data=oysters,aes(y=Weight,x=Time,fill=Location)) + geom_boxplot() + facet_wrap(~Time,scales="free")
 
 # ggplot(data=oysters,aes(y=Weight,x=Location,fill=Time)) + geom_boxplot()
 # ggplot(data=oysters,aes(y=Weight,x=Time,fill=Location)) + geom_boxplot()
@@ -378,6 +417,8 @@ brittany <- data.frame(Breed=factor(1,label="Brittany"),Length=rnorm(100,60,10),
 springer <- data.frame(Breed=factor(2,label="Springer"),Length=rnorm(100,75,10),Weight=rnorm(100,25,3))
 
 dogs <- rbind(flattie,brittany,springer)
+ggplot(dogs,aes(x=Length,y=Weight,colour=Breed))+geom_point()
+ggplot(dogs,aes(x=Length,y=Weight))+geom_point() + facet_grid(~Breed)
 
 # ggplot(dogs,aes(x=Length,y=Weight,colour=Breed))+geom_point()
 # ggplot(dogs,aes(x=Length,y=Weight))+geom_point() + facet_grid(~Breed)
@@ -393,6 +434,10 @@ brittanyF <- data.frame(Breed=factor(1,label="Brittany"),Gender=factor(1,label="
 springerF <- data.frame(Breed=factor(2,label="Springer"),Gender=factor(1,label="Female"),Length=rnorm(100,70,10),Weight=rnorm(100,23,4))
 
 dogsG <- rbind(flattieM,flattieF,brittanyM,brittanyF,springerM,springerF)
+ggplot(dogsG,aes(x=Length,y=Weight,colour=Breed,shape=Gender))+geom_point()
+ggplot(dogsG,aes(x=Length,y=Weight,colour=Gender,shape=Breed))+geom_point()
+ggplot(dogsG,aes(x=Length,y=Weight,colour=Breed)) + geom_point() + facet_grid(~Gender)
+ggplot(dogsG,aes(x=Length,y=Weight)) + geom_point() + facet_grid(~Gender*Breed)
 
 # ggplot(dogsG,aes(x=Length,y=Weight,colour=Breed,shape=Gender))+geom_point()
 # ggplot(dogsG,aes(x=Length,y=Weight,colour=Gender,shape=Breed))+geom_point()
@@ -412,12 +457,11 @@ weightM <- heightM/2+jitterM
 medical <- data.frame(Height=heightM,Weight=weightM,Risk=heightM/weightM,RestHR=rnorm(100,85,15),LE=rnorm(100,80,10))
 
 # parallel co-ordinates
-# parcoord(medical,var.label=TRUE,col=1+(0:100)%/%25)
+parcoord(medical,var.label=TRUE,col=1+(0:100)%/%25)
 
 # radar charts
-
-# radarchart(medical,maxmin=FALSE,plty=1)
-# radarchart(medical[1:5,],maxmin=FALSE,plty=1)
+radarchart(medical,maxmin=FALSE,plty=1)
+radarchart(medical[1:5,],maxmin=FALSE,plty=1)
 
 
 
@@ -425,17 +469,15 @@ medical <- data.frame(Height=heightM,Weight=weightM,Risk=heightM/weightM,RestHR=
 # HERE BE DRAGONS. This code needs to be executed line-by-line. The layout function needs to be called again
 # afterwards, or any subsequent drawings are distorted.
 
-
-# par(mar=c(1,2,2,1))
-# layout(matrix(1:16,ncol=4))
-# lapply(1:16, function(i){
-#       radarchart(rbind(c(min(medical[,1]),min(medical[,2]),min(medical[,3]),min(medical[,4]),min(medical[,5])),medical[i,],c(max(medical[,1]),max(medical[,2]),max(medical[,3]),max(medical[,4]),max(medical[,5]))),maxmin=FALSE,cglty=3,plty=1)})
+par(mar=c(1,2,2,1))
+layout(matrix(1:16,ncol=4))
+lapply(1:16, function(i){
+       radarchart(rbind(c(min(medical[,1]),min(medical[,2]),min(medical[,3]),min(medical[,4]),min(medical[,5])),medical[i,],c(max(medical[,1]),max(medical[,2]),max(medical[,3]),max(medical[,4]),max(medical[,5]))),maxmin=FALSE,cglty=3,plty=1)})
 
 
 
 # matrix of scatter plots
-
-# splom(medical)
+splom(medical)
 
 
 
@@ -444,7 +486,7 @@ medical <- data.frame(Height=heightM,Weight=weightM,Risk=heightM/weightM,RestHR=
 # Here we see what you can do when you import your own data. The given datafile (you will need to download it)
 # contains various measurements of 302 crabs found in kelp, across four weeks in three different locations.
 
-raw.data <- read.csv("KelpHoldfastData.csv")
+raw.data <- read.csv(file="C:/Users/Jonny/Documents/GitHub/DataAnalytics/Lab 1/KelpHoldfastData.csv")
 
 # Make Weeks a factor. This is necessary because unless you tell R otherwise, any numbers are treated as numbers.
 # In this case, we want them treated as categorical variables.
@@ -454,6 +496,6 @@ raw.data$Week <- as.factor(raw.data$Week)
 ###### QUESTION 6 ################
 # Using the patterns above for multidimensional data, draw some pictures to investigate if there are 
 # any patterns within the data. 
-
-
+kelp <- rbind(1,2,3,4)
+ggplot(data=kelp,aes(y=KelpNumber,x=Week,fill=Location)) + geom_boxplot()
 
