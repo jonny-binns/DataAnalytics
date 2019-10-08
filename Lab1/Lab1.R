@@ -486,16 +486,35 @@ splom(medical)
 # Here we see what you can do when you import your own data. The given datafile (you will need to download it)
 # contains various measurements of 302 crabs found in kelp, across four weeks in three different locations.
 
-raw.data <- read.csv(file="C:/Users/Jonny/Documents/GitHub/DataAnalytics/Lab 1/KelpHoldfastData.csv")
-
+#for windows raw.data <- read.csv(file="C:/Users/Jonny/Documents/GitHub/DataAnalytics/Lab 1/KelpHoldfastData.csv")
+#for osx 
+raw.data <- read.csv(file="/Users/jonathanbinns/Documents/GitHub/DataAnalytics/Lab\ 1/KelpHoldfastData.csv")
 # Make Weeks a factor. This is necessary because unless you tell R otherwise, any numbers are treated as numbers.
 # In this case, we want them treated as categorical variables.
-raw.data$Week <- as.factor(raw.data$Week)
+raw.data$SampleNumber <- as.factor(raw.data$SampleNumber)
+sampleNumber <- raw.data$SampleNumber
+print(sampleNumber)
 
+raw.data$Week <- as.factor(raw.data$Week)
+week <- raw.data$Week
+print(week)
+
+raw.data$Location <- as.factor(raw.data$Location)
+location <- raw.data$Location
+print(location)
+
+raw.data$XYZ <- as.factor(raw.data$XYZ)
+XYZ <- raw.data$XYZ
+print(XYZ)
+
+raw.data$KelpNumber <- as.factor(raw.data$KelpNumber)
+kelpNumber <- raw.data$KelpNumber
+print(KelpNumber)
 
 ###### QUESTION 6 ################
 # Using the patterns above for multidimensional data, draw some pictures to investigate if there are 
 # any patterns within the data. 
-kelp <- rbind(1,2,3,4)
-ggplot(data=kelp,aes(y=KelpNumber,x=Week,fill=Location)) + geom_boxplot()
+kelpFrame <- data.frame(SampleNumber=sampleNumber, Week=week, Location=location, XYZ=XYZ, KelpNumber=kelpNumber)
+print(kelpFrame)
+ggplot(kelpFrame,aes(x=KelpNumber, y=XYZ))+geom_point()
 
